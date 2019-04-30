@@ -7,6 +7,7 @@ package repo
 import (
 	api "github.com/gogs/go-gogs-client"
 
+	"github.com/gogs/gogs/models"
 	"github.com/gogs/gogs/models/errors"
 	"github.com/gogs/gogs/pkg/context"
 	"github.com/gogs/gogs/routes/api/v1/convert"
@@ -52,4 +53,24 @@ func ListBranches(c *context.APIContext) {
 	}
 
 	c.JSON(200, &apiBranches)
+}
+
+func CreateBranch(c *context.APIContext) {
+	opts := &models.CreateBranchOptions{
+		BranchName:  c.Query("branchName"),
+		NewBranchName:  c.Query("newBranchName"),
+	}
+
+	err := c.Repo.Repository.CreateNewBranch(c.User, opts.BranchName, opts.NewBranchName)
+	if err != nil {
+		c.JSON(500, map[string]interface{}{
+			"ok":    false,
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(200, map[string]interface{}{
+		"ok":   true,
+	})
 }

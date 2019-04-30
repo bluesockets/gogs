@@ -2434,6 +2434,11 @@ func (repo *Repository) GetForks() ([]*Repository, error) {
 //         \/             \/     \/     \/     \/
 //
 
+type CreateBranchOptions struct {
+	BranchName  string
+	NewBranchName  string
+}
+
 func (repo *Repository) CreateNewBranch(doer *User, oldBranchName, branchName string) (err error) {
 	repoWorkingPool.CheckIn(com.ToStr(repo.ID))
 	defer repoWorkingPool.CheckOut(com.ToStr(repo.ID))
